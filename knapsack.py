@@ -1,6 +1,6 @@
 import random
 
-from scipy.optimize import linprog
+import pulp
 import pandas as pd
 
 
@@ -68,15 +68,20 @@ class Knapsack:
         return sum([i.weight for i in item_set]) < self.capacity
 
     def solve_lin_prog(self) -> tuple[list[Item], float]:
-        num_items = len(self.available_items)
-        values = [-item.value for item in self.available_items]  # Maximize value (minimize negative value)
-        weights = [item.weight for item in self.available_items]
+        problem = pulp.LpProblem("Knapsack Problem", pulp.LpMaximize)
 
-        bounds = [(0, 1) for _ in range(num_items)]  # Binary constraint (item is taken or not)
+        item_vars = [pulp.LpVariable(f'item_{i}', cat='Binary') for i in range(len(self.available_items))]
 
-        result = linprog(c=values, A_ub=[weights], b_ub=[self.capacity], bounds=bounds, method='highs')
+        problem += pulp.lpSum([item.value * item_vars[i] for i, item in enumerate(self.available_items)])
 
-        selected_items = [self.available_items[i] for i in range(num_items) if result.x[i] > 0.5]
-        total_value = sum(item.value for item in selected_items)
+        problem += pulp.lpSum(
+            [item.weight * item_vars[i] for i, item in enumerate(self.available_items)]) <= self.capacity
 
-        return selected_items, total_value
+        problem.solve()
+
+        selected_items = [self.available_items[i] for i in range(len(item_vars)) if item_vars[i].varValue == 1]
+
+        # total_value = sum(item.value for item in selected_items)
+        total_weight = sum(item.weight for item in selected_items)
+
+        return selected_items, total_weight
