@@ -81,7 +81,6 @@ class Knapsack:
 
         selected_items = [self.available_items[i] for i in range(len(item_vars)) if item_vars[i].varValue == 1]
 
-        # total_value = sum(item.value for item in selected_items)
-        total_weight = sum(item.weight for item in selected_items)
+        total_value = sum(item.value for item in selected_items)
 
-        return selected_items, total_weight
+        return selected_items, total_value
