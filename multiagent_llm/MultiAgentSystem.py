@@ -1,6 +1,6 @@
 from abc import ABC
 
-from Agent import Agent
+from .Agent import Agent
 
 
 class MultiAgentSystem(Agent, ABC):

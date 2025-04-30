@@ -18,7 +18,7 @@ class SequentialMAS(MultiAgentSystem):
         self.__k = k
 
     @override
-    def act(self, state: str) -> str:
+    def act(self, state: str | list[dict] | dict) -> str:
         out = state
         keys = [int(i) for i in self.__agents.keys()]
         keys.sort()

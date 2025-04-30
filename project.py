@@ -1,8 +1,8 @@
 import pandas as pd
 
 from knapsack import generate_sample_dataset
-# from multiagent_llm.Agent.LLM_Agent import LLM_Agent
-# from multiagent_llm.model_loaders import Casual_LLM_Loader
+from multiagent_llm.Agent.LLM_Agent import LLM_Agent
+from multiagent_llm.model_loaders import Casual_LLM_Loader
 
 
 def main():
